@@ -5,7 +5,7 @@ GO=$(shell which go)
 PROGRAM=beanstalkd-cli
 
 # Compile time values
-COMMIT_HASH=446f49e78f79a164079a99a88446182703331c75
+COMMIT_HASH=`git rev-parse --verify HEAD`
 
 # Interpolate the variable values using go link flags
 LDFLAGS=-ldflags "-X main.CommitHash=${COMMIT_HASH} -X main.Name=${PROGRAM}"
