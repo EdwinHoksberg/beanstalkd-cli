@@ -19,8 +19,8 @@ release:
 
 	GOOS=linux GOARCH=amd64 $(GO) build ${LDFLAGS} -o $(BUILDPATH)/bin/$(PROGRAM)_linux_amd64
 	GOOS=linux GOARCH=386 $(GO) build ${LDFLAGS} -o $(BUILDPATH)/bin/$(PROGRAM)_linux_386
-	GOOS=windows GOARCH=amd64 $(GO) build ${LDFLAGS} -o $(BUILDPATH)/bin/$(PROGRAM)_windows_amd64
-	GOOS=windows GOARCH=386 $(GO) build ${LDFLAGS} -o $(BUILDPATH)/bin/$(PROGRAM)_windows_386
+	GOOS=windows GOARCH=amd64 $(GO) build ${LDFLAGS} -o $(BUILDPATH)/bin/$(PROGRAM)_windows_amd64.exe
+	GOOS=windows GOARCH=386 $(GO) build ${LDFLAGS} -o $(BUILDPATH)/bin/$(PROGRAM)_windows_386.exe
 
 clean:
 	rm -f $(BUILDPATH)/bin/$(PROGRAM)
