@@ -11,6 +11,7 @@ import (
 var (
 	Name       string
 	CommitHash string
+	Version    string
 )
 
 func main() {
@@ -20,7 +21,7 @@ func main() {
 
 	app.Name = Name
 	app.HelpName = Name
-	app.Version = "1.0.0"
+	app.Version = Version
 	app.Usage = fmt.Sprintf(`A simple cli interface for managing beanstalkd queues.
 
    Homepage: https://github.com/edwinhoksberg/beanstalkd-cli
