@@ -1,21 +1,13 @@
 package command
 
 import (
-	"fmt"
-	"github.com/maxid/beanstalkd"
 	"github.com/urfave/cli"
 )
 
 func (c *Command) Flush(cli *cli.Context) {
 	log := c.GetLogger(cli)
 
-	// Build a connection string.
-	addr := fmt.Sprintf("%s:%d", cli.String("server"), cli.Int("port"))
-
-	// Connect to the beanstalkd server .
-	log.Debugf("Connecting to beanstalkd server: %s", addr)
-	queue, err := beanstalkd.Dial(addr)
-
+	client, err := c.GetBeanstalkdClient(cli)
 	if err != nil {
 		log.WithError(err).Error("Could not connect to beanstalkd server")
 		return
@@ -25,7 +17,7 @@ func (c *Command) Flush(cli *cli.Context) {
 	for {
 		if cli.String("tube") != "default" {
 			// Watch a specified tube.
-			if _, err := queue.Watch(cli.String("tube")); err != nil {
+			if _, err := client.Watch(cli.String("tube")); err != nil {
 				log.WithError(err).Error("Failed to select tube")
 				return
 			}
@@ -33,13 +25,13 @@ func (c *Command) Flush(cli *cli.Context) {
 			// By default the default tube is always in the watch list.
 			// To prevent flushing any jobs from the default tube we can ignore it
 			// after watching a different tube.
-			if _, err := queue.Ignore("default"); err != nil {
+			if _, err := client.Ignore("default"); err != nil {
 				log.WithError(err).Error("Failed to ignore default tube")
 				return
 			}
 		}
 
-		job, err := queue.Reserve(1)
+		job, err := client.Reserve(1)
 		if err != nil {
 			if err.Error() == "timed out" {
 				// If the job deleted counter is still at zero, it means the tube
@@ -59,7 +51,7 @@ func (c *Command) Flush(cli *cli.Context) {
 			}
 		}
 
-		if err := queue.Delete(job.Id); err != nil {
+		if err := client.Delete(job.Id); err != nil {
 			log.WithError(err).WithField("id", job.Id).Error("Failed to delete job")
 			break
 		}
@@ -69,5 +61,5 @@ func (c *Command) Flush(cli *cli.Context) {
 
 	log.Infof("%d jobs removed", counter)
 
-	queue.Quit()
+	client.Quit()
 }

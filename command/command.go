@@ -1,6 +1,8 @@
 package command
 
 import (
+	"fmt"
+	"github.com/maxid/beanstalkd"
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )
@@ -20,4 +22,19 @@ func (c Command) GetLogger(cli *cli.Context) *log.Logger {
 	}
 
 	return log.StandardLogger()
+}
+
+func (c Command) GetBeanstalkdClient(cli *cli.Context) (*beanstalkd.BeanstalkdClient, error) {
+	// Build a connection string.
+	addr := fmt.Sprintf("%s:%d", cli.String("server"), cli.Int("port"))
+
+	// Connect to the beanstalkd server.
+	log.Debugf("Connecting to beanstalkd server: %s", addr)
+	client, err := beanstalkd.Dial(addr)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return client, nil
 }

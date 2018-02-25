@@ -3,7 +3,6 @@ package command
 import (
 	"bytes"
 	"fmt"
-	"github.com/maxid/beanstalkd"
 	"github.com/urfave/cli"
 	"time"
 )
@@ -28,13 +27,7 @@ var (
 func (c *Command) Monitor(cli *cli.Context) {
 	log := c.GetLogger(cli)
 
-	// Build a connection string.
-	addr := fmt.Sprintf("%s:%d", cli.String("server"), cli.Int("port"))
-
-	// Connect to the beanstalkd server.
-	log.Debugf("Connecting to beanstalkd server: %s", addr)
-	client, err := beanstalkd.Dial(addr)
-
+	client, err := c.GetBeanstalkdClient(cli)
 	if err != nil {
 		log.WithError(err).Error("Could not connect to beanstalkd server")
 		return

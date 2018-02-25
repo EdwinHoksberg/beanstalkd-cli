@@ -1,8 +1,6 @@
 package command
 
 import (
-	"fmt"
-	"github.com/maxid/beanstalkd"
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )
@@ -15,25 +13,19 @@ func (c *Command) Put(cli *cli.Context) {
 		return
 	}
 
-	// Build a connection string.
-	addr := fmt.Sprintf("%s:%d", cli.String("server"), cli.Int("port"))
-
-	// Connect to the beanstalkd server .
-	log.Debugf("Connecting to beanstalkd server: %s", addr)
-	queue, err := beanstalkd.Dial(addr)
-
+	client, err := c.GetBeanstalkdClient(cli)
 	if err != nil {
 		log.WithError(err).Error("Could not connect to beanstalkd server")
 		return
 	}
 
-	queue.Use(cli.String("tube"))
+	client.Use(cli.String("tube"))
 	if err != nil {
 		log.WithError(err).Error("Failed to select tube")
 		return
 	}
 
-	id, err := queue.Put(0, 0, 10000, []byte(cli.String("data")))
+	id, err := client.Put(0, 0, 10000, []byte(cli.String("data")))
 	if err != nil {
 		log.WithError(err).Error()
 		return
@@ -44,5 +36,5 @@ func (c *Command) Put(cli *cli.Context) {
 		"id":   id,
 	}).Info("Succesfully inserted job")
 
-	queue.Quit()
+	client.Quit()
 }
