@@ -4,106 +4,101 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/maxid/beanstalkd"
-	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 	"time"
 )
 
-var logger *logrus.Logger
+var (
+	keys = []string{
+		"uptime",
+		"current-jobs-ready",
+		"current-workers",
+		"current-producers",
+		"current-connections",
+	}
+
+	tubeKeys = []string{
+		"total-jobs",
+		"current-jobs-ready",
+		"current-using",
+		"current-watching",
+	}
+)
 
 func (c *Command) Monitor(cli *cli.Context) {
-	logger = c.GetLogger(cli)
+	log := c.GetLogger(cli)
 
 	// Build a connection string.
 	addr := fmt.Sprintf("%s:%d", cli.String("server"), cli.Int("port"))
 
-	// Connect to the beanstalkd server .
-	logger.Debugf("Connecting to beanstalkd server: %s", addr)
-	queue, err := beanstalkd.Dial(addr)
+	// Connect to the beanstalkd server.
+	log.Debugf("Connecting to beanstalkd server: %s", addr)
+	client, err := beanstalkd.Dial(addr)
 
 	if err != nil {
-		logger.WithError(err).Error("Could not connect to beanstalkd server")
+		log.WithError(err).Error("Could not connect to beanstalkd server")
 		return
 	}
 
-	if len(cli.String("tube")) < 1 {
-		monitor(cli, queue)
-	} else {
-		monitorTube(cli, queue)
-	}
-}
-
-func monitor(cli *cli.Context, queue *beanstalkd.BeanstalkdClient) {
 	// Assign a few interesting keys to display.
 	// If no keys are passed on the cli we assign a we default keys ourself.
-	keys := cli.StringSlice("keys")
-	if len(keys) == 0 {
-		keys = []string{
-			"current-jobs-ready",
-			"current-workers",
-			"current-producers",
-			"current-connections",
-		}
+	if len(cli.StringSlice("keys")) > 0 {
+		keys = cli.StringSlice("keys")
+	}
+
+	if len(cli.StringSlice("tubekeys")) > 0 {
+		tubeKeys = cli.StringSlice("tubekeys")
 	}
 
 	// Infinite loop, show beanstalkd stats until the users exists the application.
 	for {
 		// Retrieve stats, break loop if an error occured.
-		logger.Debug("Retrieving stats...")
-		stats, err := queue.Stats()
+		log.Debug("Retrieving stats...")
+		stats, err := client.Stats()
 
 		if err != nil {
-			logger.WithError(err).Error()
+			log.WithError(err).Error()
 			break
 		}
 
 		// Build a buffer for our output.
 		var buffer bytes.Buffer
-		for _, value := range keys {
-			buffer.WriteString(fmt.Sprintf("%s: %s, ", value, stats[value]))
+
+		// Clear the screen.
+		buffer.WriteString("\033[H\033[2J")
+
+		// Write global stats.
+		for i, value := range keys {
+			buffer.WriteString(fmt.Sprintf("%s: %s", value, stats[value]))
+
+			if i < (len(keys) - 1) {
+				buffer.WriteString(", ")
+			}
 		}
 
-		buffer.WriteByte('\r')
+		buffer.WriteByte('\n')
 
-		// Output the buffer.
-		fmt.Print(buffer.String())
-
-		// Sleep for 1 second.
-		time.Sleep(time.Second)
-	}
-}
-
-func monitorTube(cli *cli.Context, queue *beanstalkd.BeanstalkdClient) {
-	// Assign a few interesting keys to display.
-	// If no keys are passed on the cli we assign a we default keys ourself.
-	keys := cli.StringSlice("keys")
-	if len(keys) == 0 {
-		keys = []string{
-			"total-jobs",
-			"current-jobs-ready",
-			"current-using",
-			"current-waiting",
-		}
-	}
-
-	// Infinite loop, show beanstalkd stats until the users exists the application.
-	for {
-		// Retrieve stats, break loop if an error occured.
-		stats, err := queue.StatsTube(cli.String("tube"))
+		// Get a slice of all existing tubes.
+		tubes, err := client.ListTubes()
 		if err != nil {
-			logger.WithError(err).Error()
+			log.WithError(err).Error("Error listing tubes")
 			break
 		}
 
-		// Build a buffer for our output.
-		var buffer bytes.Buffer
-		buffer.WriteString(fmt.Sprintf("%s: ", cli.String("tube")))
+		// Write stats for each tube.
+		for _, tube := range tubes {
+			stats, err := client.StatsTube(tube)
+			if err != nil {
+				log.WithError(err).Error("Error reading tube stats")
+				break
+			}
 
-		for _, value := range keys {
-			buffer.WriteString(fmt.Sprintf("%s: %s, ", value, stats[value]))
+			buffer.WriteString(fmt.Sprintf("\nName: %s\n", tube))
+
+			for _, value := range tubeKeys {
+				buffer.WriteString(fmt.Sprintf("%s: %s\n", value, stats[value]))
+			}
 		}
-
-		buffer.WriteByte('\r')
 
 		// Output the buffer.
 		fmt.Print(buffer.String())

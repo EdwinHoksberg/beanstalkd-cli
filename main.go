@@ -43,13 +43,13 @@ func main() {
 					Usage: "The port on which beanstalkd is listening",
 					Value: 11300,
 				},
-				cli.StringFlag{
-					Name:  "tube",
-					Usage: "The name of the tube to monitor",
-				},
 				cli.StringSliceFlag{
 					Name:  "keys",
 					Usage: "Different keys to monitor",
+				},
+				cli.StringSliceFlag{
+					Name:  "tubekeys",
+					Usage: "Different tube keys to monitor",
 				},
 			},
 		},
