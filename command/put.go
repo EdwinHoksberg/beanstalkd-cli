@@ -27,6 +27,12 @@ func (c *Command) Put(cli *cli.Context) {
 		return
 	}
 
+	queue.Use(cli.String("tube"))
+	if err != nil {
+		log.WithError(err).Error("Failed to select tube")
+		return
+	}
+
 	id, err := queue.Put(0, 0, 10000, []byte(cli.String("data")))
 	if err != nil {
 		log.WithError(err).Error()
@@ -37,4 +43,6 @@ func (c *Command) Put(cli *cli.Context) {
 		"tube": cli.String("tube"),
 		"id":   id,
 	}).Info("Succesfully inserted job")
+
+	queue.Quit()
 }
