@@ -1,6 +1,9 @@
 # beanstalkd-cli
 A simple cli interface for managing beanstalkd queues.
 
+## Download
+You can find the latest release including binaries [here](https://github.com/EdwinHoksberg/beanstalkd-cli/releases/latest).
+
 ## Usage
 ```
 NAME:
