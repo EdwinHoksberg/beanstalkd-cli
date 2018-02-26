@@ -99,6 +99,18 @@ func main() {
 				},
 			},
 		},
+		{
+			Name:   "peek",
+			Usage:  "Display a job from the queue without removing it",
+			Action: command.Peek,
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "tube",
+					Usage: "The name of the tube to peek from",
+					Value: "default",
+				},
+			},
+		},
 	}
 
 	app.Flags = []cli.Flag{
