@@ -1,0 +1,22 @@
+language: go
+
+env:
+  - GIMME_OS=linux GIMME_ARCH=amd64
+  - GIMME_OS=linux GIMME_ARCH=386
+  - GIMME_OS=windows GIMME_ARCH=amd64
+  - GIMME_OS=windows GIMME_ARCH=386
+
+install:
+  - go get -v
+
+script:
+  - go build -v -o ./bin/beanstalkd-cli_$GIMME_OS_$GIMME_ARCH
+
+deploy:
+  provider: releases
+  api_key:
+    secure: iH8QrtCsrGPt9mc5P/6nyHPnbq6TQIdKd89GR5zdsei/9KXW+7XxTerGWDWy53/EmJaweuMhPKGWIIr/ORY7e39OMW5mUmkqpWSgsRhP8eGLOPuMwbqVcfZwYspnI/0mLNB1cF/YzUR9FFRH3oDx6jjPt7H5Qyz5hHD6pQ6ivg4hvL1Fqrv0EEkNwGMtH4RTnJjmKYpuqeJei+DNeKrxTp2hqavwnQqTQrap8iBy1ZqYn4vpuZTEUL561cqKiJATrsx8ujXaRd2eq0VYPFluKw4OvLqQWyXHCQYPAJwLqapGb9v+hj62Slbtqq17xRENLuf9Hnp3D7pyFWBPEjxVGRbw/7ifOAvlRgY167NsaV2Awoo23M8ocLvrLLtyec9ykWe40xf4y0mwBSiMo02jieNgY0T7dfcsugsT+Te5+Ja3GAzzm/l+MDieEfnJOvQMp1weByOxjTffL30VVO5dWzCQuaAu3+4Miw1sk/euo4qjI2bPNCbuG7zA9Fgf3a4fsjdP0Z/KFM6qnFvcFgXrEu3GUNDCzTlOh3hu6F6gdHd/M/Axs5j6GzxuRpdrJhltbB290A0FmJGcCWn1T9r/bgPldOCIaZLapDBGYVA7pNBqn+nXno1pnZrEQH7gL1bdVqSKL9ghh1r5dJdBBxyhnk/yc38YdYntpTFQJ6hRGXU=
+  file: bin/*
+  skip_cleanup: true
+  on:
+    tags: true
