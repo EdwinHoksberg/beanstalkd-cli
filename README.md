@@ -1,4 +1,4 @@
-# beanstalkd-cli
+# beanstalkd-cli [![Build Status](https://travis-ci.org/EdwinHoksberg/beanstalkd-cli.svg?branch=master)](https://travis-ci.org/EdwinHoksberg/beanstalkd-cli)
 A simple cli interface for managing beanstalkd queues.
 
 ## Download
