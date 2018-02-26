@@ -6,6 +6,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 	"os"
+	"time"
 )
 
 var (
@@ -80,6 +81,21 @@ func main() {
 				cli.StringFlag{
 					Name:  "data",
 					Usage: "The message to write to the queue",
+				},
+				cli.IntFlag{
+					Name:  "priority",
+					Usage: "Job priority, a lower value will be scheduled before jobs with a larger priority",
+					Value: 1024,
+				},
+				cli.DurationFlag{
+					Name:  "delay",
+					Usage: "How many seconds to wait before putting the job in the queue, e.g. 300s or 2h15m",
+					Value: 0,
+				},
+				cli.DurationFlag{
+					Name:  "ttr",
+					Usage: "The number of seconds to allow a worker to run this job, e.g. 300s or 2h15m",
+					Value: time.Hour,
 				},
 			},
 		},

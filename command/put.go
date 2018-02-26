@@ -25,7 +25,13 @@ func (c *Command) Put(cli *cli.Context) {
 		return
 	}
 
-	id, err := client.Put(0, 0, 10000, []byte(cli.String("data")))
+	id, err := client.Put(
+		uint32(cli.Int("priority")),
+		cli.Duration("delay"),
+		cli.Duration("duration"),
+		[]byte(cli.String("data")),
+	)
+
 	if err != nil {
 		log.WithError(err).WithField("tube", cli.String("tube")).Error("Failed to insert job in queue")
 		return
