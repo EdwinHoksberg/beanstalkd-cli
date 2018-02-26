@@ -33,16 +33,6 @@ func main() {
 			Usage:  "Monitor the beanstalkd queues",
 			Action: command.Monitor,
 			Flags: []cli.Flag{
-				cli.StringFlag{
-					Name:  "server",
-					Usage: "The server name where beanstalkd is running",
-					Value: "127.0.0.1",
-				},
-				cli.IntFlag{
-					Name:  "port",
-					Usage: "The port on which beanstalkd is listening",
-					Value: 11300,
-				},
 				cli.StringSliceFlag{
 					Name:  "keys",
 					Usage: "Different keys to monitor",
@@ -59,16 +49,6 @@ func main() {
 			Action: command.Flush,
 			Flags: []cli.Flag{
 				cli.StringFlag{
-					Name:  "server",
-					Usage: "The server name where beanstalkd is running",
-					Value: "127.0.0.1",
-				},
-				cli.IntFlag{
-					Name:  "port",
-					Usage: "The port on which beanstalkd is listening",
-					Value: 11300,
-				},
-				cli.StringFlag{
 					Name:  "tube",
 					Usage: "The name of the tube to flush",
 					Value: "default",
@@ -81,16 +61,6 @@ func main() {
 			Action: command.Pop,
 			Flags: []cli.Flag{
 				cli.StringFlag{
-					Name:  "server",
-					Usage: "The server name where beanstalkd is running",
-					Value: "127.0.0.1",
-				},
-				cli.IntFlag{
-					Name:  "port",
-					Usage: "The port on which beanstalkd is listening",
-					Value: 11300,
-				},
-				cli.StringFlag{
 					Name:  "tube",
 					Usage: "The name of the tube to pop an item from",
 					Value: "default",
@@ -102,16 +72,6 @@ func main() {
 			Usage:  "Write a job to a queue",
 			Action: command.Put,
 			Flags: []cli.Flag{
-				cli.StringFlag{
-					Name:  "server",
-					Usage: "The server name where beanstalkd is running",
-					Value: "127.0.0.1",
-				},
-				cli.IntFlag{
-					Name:  "port",
-					Usage: "The port on which beanstalkd is listening",
-					Value: 11300,
-				},
 				cli.StringFlag{
 					Name:  "tube",
 					Usage: "The name of the tube to pop an item from",
@@ -129,6 +89,16 @@ func main() {
 		cli.BoolFlag{
 			Name:  "verbose",
 			Usage: "set this to enable debug logging",
+		},
+		cli.StringFlag{
+			Name:  "server",
+			Usage: "The server name where beanstalkd is running",
+			Value: "127.0.0.1",
+		},
+		cli.IntFlag{
+			Name:  "port",
+			Usage: "The port on which beanstalkd is listening",
+			Value: 11300,
 		},
 	}
 
