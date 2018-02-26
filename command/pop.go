@@ -2,6 +2,7 @@ package command
 
 import (
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )
 
@@ -17,7 +18,7 @@ func (c *Command) Pop(cli *cli.Context) {
 	if cli.String("tube") != "default" {
 		// Watch a specified tube.
 		if _, err := client.Watch(cli.String("tube")); err != nil {
-			log.WithError(err).Error("Failed to select tube")
+			log.WithError(err).WithField("tube", cli.String("tube")).Error("Failed to select tube")
 			return
 		}
 
@@ -46,7 +47,10 @@ func (c *Command) Pop(cli *cli.Context) {
 	// After reserving a job, we can delete it
 	log.WithField("id", job.Id).Debug("Deleting the reserved job")
 	if err := client.Delete(job.Id); err != nil {
-		log.WithError(err).Error()
+		log.WithError(err).WithFields(logrus.Fields{
+			"tube": cli.String("tube"),
+			"job":  job.Id,
+		}).Error("Failed to delete job")
 		return
 	}
 

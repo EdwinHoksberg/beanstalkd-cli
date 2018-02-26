@@ -21,13 +21,13 @@ func (c *Command) Put(cli *cli.Context) {
 
 	client.Use(cli.String("tube"))
 	if err != nil {
-		log.WithError(err).Error("Failed to select tube")
+		log.WithError(err).WithField("tube", cli.String("tube")).Error("Failed to select tube")
 		return
 	}
 
 	id, err := client.Put(0, 0, 10000, []byte(cli.String("data")))
 	if err != nil {
-		log.WithError(err).Error()
+		log.WithError(err).WithField("tube", cli.String("tube")).Error("Failed to insert job in queue")
 		return
 	}
 

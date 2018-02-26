@@ -50,7 +50,7 @@ func (c *Command) Monitor(cli *cli.Context) {
 		stats, err := client.Stats()
 
 		if err != nil {
-			log.WithError(err).Error()
+			log.WithError(err).Error("Failed to retrieve server stats")
 			break
 		}
 
@@ -82,7 +82,7 @@ func (c *Command) Monitor(cli *cli.Context) {
 		for _, tube := range tubes {
 			stats, err := client.StatsTube(tube)
 			if err != nil {
-				log.WithError(err).Error("Error reading tube stats")
+				log.WithError(err).WithField("tube", tube).Error("Error reading tube stats")
 				break
 			}
 

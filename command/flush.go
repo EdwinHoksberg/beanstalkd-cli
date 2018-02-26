@@ -1,6 +1,7 @@
 package command
 
 import (
+	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )
 
@@ -18,7 +19,7 @@ func (c *Command) Flush(cli *cli.Context) {
 		if cli.String("tube") != "default" {
 			// Watch a specified tube.
 			if _, err := client.Watch(cli.String("tube")); err != nil {
-				log.WithError(err).Error("Failed to select tube")
+				log.WithError(err).WithField("tube", cli.String("tube")).Error("Failed to select tube")
 				return
 			}
 
@@ -37,7 +38,7 @@ func (c *Command) Flush(cli *cli.Context) {
 				// If the job deleted counter is still at zero, it means the tube
 				// was empty before we even started flushing jobs, so we don't show the error.
 				if counter == 0 {
-					log.WithError(err).Info("No jobs found in tube, exiting...")
+					log.WithError(err).WithField("tube", cli.String("tube")).Info("No jobs found in tube, exiting...")
 				}
 
 				break
@@ -46,13 +47,16 @@ func (c *Command) Flush(cli *cli.Context) {
 			// The DEADLINE_SOON message just indicates that a job was about to expire.
 			// This has no effect on our actions here so we just ignore it.
 			if err.Error() != "deadline soon" {
-				log.WithError(err).Error("Failed reserving a job")
+				log.WithError(err).WithField("tube", cli.String("tube")).Error("Failed reserving a job")
 				break
 			}
 		}
 
 		if err := client.Delete(job.Id); err != nil {
-			log.WithError(err).WithField("id", job.Id).Error("Failed to delete job")
+			log.WithError(err).WithFields(logrus.Fields{
+				"tube": cli.String("tube"),
+				"job":  job.Id,
+			}).Error("Failed to delete job")
 			break
 		}
 
