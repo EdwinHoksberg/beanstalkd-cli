@@ -27,6 +27,7 @@ var (
 func (c *Command) Monitor(cli *cli.Context) {
 	log := c.GetLogger(cli)
 
+	// Build and connect to beanstalkd
 	client, err := c.GetBeanstalkdClient(cli)
 	if err != nil {
 		log.WithError(err).Error("Could not connect to beanstalkd server")

@@ -8,6 +8,7 @@ import (
 func (c *Command) Flush(cli *cli.Context) {
 	log := c.GetLogger(cli)
 
+	// Build and connect to beanstalkd
 	client, err := c.GetBeanstalkdClient(cli)
 	if err != nil {
 		log.WithError(err).Error("Could not connect to beanstalkd server")
@@ -52,6 +53,7 @@ func (c *Command) Flush(cli *cli.Context) {
 			}
 		}
 
+		// Delete the job from the tube
 		if err := client.Delete(job.Id); err != nil {
 			log.WithError(err).WithFields(logrus.Fields{
 				"tube": cli.String("tube"),

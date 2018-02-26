@@ -10,6 +10,7 @@ import (
 type Command struct{}
 
 func (c Command) GetLogger(cli *cli.Context) *log.Logger {
+	// Set the default output formatter
 	format := &log.TextFormatter{
 		TimestampFormat: "2006-01-02 15:04:05.000",
 		FullTimestamp:   true,
@@ -17,6 +18,7 @@ func (c Command) GetLogger(cli *cli.Context) *log.Logger {
 
 	log.SetFormatter(format)
 
+	// If the verbose flag was enabled, enable debug logging
 	if cli.GlobalBool("verbose") {
 		log.SetLevel(log.DebugLevel)
 	}
