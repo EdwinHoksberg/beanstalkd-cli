@@ -1,6 +1,8 @@
 language: go
 
 env:
+  global:
+    - PROGRAM=beanstalkd-cli
   - GIMME_OS=linux GIMME_ARCH=amd64 EXT=
   - GIMME_OS=linux GIMME_ARCH=386 EXT=
   - GIMME_OS=windows GIMME_ARCH=amd64 EXT=.exe
@@ -10,7 +12,7 @@ install:
   - go get -v
 
 script:
-  - go build -v -o ./bin/beanstalkd-cli_${GIMME_OS}_${GIMME_ARCH}${EXT}
+  - go build -v -ldflags "-X main.CommitHash=${TRAVIS_COMMIT} -X main.Name=${PROGRAM} -X main.Version=${TRAVIS_TAG}" -o ./bin/beanstalkd-cli_${GIMME_OS}_${GIMME_ARCH}${EXT}
 
 deploy:
   provider: releases
