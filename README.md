@@ -10,24 +10,28 @@ NAME:
    beanstalkd-cli - A simple cli interface for managing beanstalkd queues.
 
    Homepage: https://github.com/edwinhoksberg/beanstalkd-cli
+   Commit:   a7b7f2db5f5b9dd3a1978c107dbd96547394429c
 
 USAGE:
    beanstalkd-cli [global options] command [command options] [arguments...]
 
 VERSION:
-   1.0.0
+   1.2.7
 
 COMMANDS:
      monitor  Monitor the beanstalkd queues
      flush    Completely remove all jobs from a tube
      pop      Remove a job from a queue and display it
      put      Write a job to a queue
+     peek     Display a job from the queue without removing it
      help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --verbose      set this to enable debug logging
-   --help, -h     show help
-   --version, -v  print the version
+   --verbose       set this to enable debug logging
+   --server value  The server name where beanstalkd is running (default: "127.0.0.1")
+   --port value    The port on which beanstalkd is listening (default: 11300)
+   --help, -h      show help
+   --version, -v   print the version
 ```
 
 ## Development
