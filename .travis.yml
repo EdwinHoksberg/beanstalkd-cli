@@ -3,10 +3,11 @@ language: go
 env:
   global:
     - PROGRAM=beanstalkd-cli
-  - GIMME_OS=linux GIMME_ARCH=amd64 EXT=
-  - GIMME_OS=linux GIMME_ARCH=386 EXT=
-  - GIMME_OS=windows GIMME_ARCH=amd64 EXT=.exe
-  - GIMME_OS=windows GIMME_ARCH=386 EXT=.exe
+  matrix:
+    - GIMME_OS=linux GIMME_ARCH=amd64 EXT=
+    - GIMME_OS=linux GIMME_ARCH=386 EXT=
+    - GIMME_OS=windows GIMME_ARCH=amd64 EXT=.exe
+    - GIMME_OS=windows GIMME_ARCH=386 EXT=.exe
 
 install:
   - go get -v
