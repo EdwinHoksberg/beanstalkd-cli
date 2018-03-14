@@ -118,6 +118,10 @@ func main() {
 			Name:  "verbose",
 			Usage: "set this to enable debug logging",
 		},
+		cli.BoolFlag{
+			Name:  "quiet",
+			Usage: "set this to disable logging",
+		},
 		cli.StringFlag{
 			Name:  "server",
 			Usage: "The server name where beanstalkd is running",

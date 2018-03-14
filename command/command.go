@@ -4,12 +4,18 @@ import (
 	"fmt"
 	"github.com/maxid/beanstalkd"
 	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus/hooks/test"
 	"github.com/urfave/cli"
 )
 
 type Command struct{}
 
 func (c Command) GetLogger(cli *cli.Context) *log.Logger {
+	if cli.GlobalBool("quiet") {
+		logger, _ := test.NewNullLogger()
+		return logger
+	}
+
 	// Set the default output formatter
 	format := &log.TextFormatter{
 		TimestampFormat: "2006-01-02 15:04:05.000",
