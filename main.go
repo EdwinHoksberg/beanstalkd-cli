@@ -11,7 +11,6 @@ import (
 
 var (
 	Name       string
-	CommitHash string
 	Version    string
 )
 
@@ -23,10 +22,15 @@ func main() {
 	app.Name = Name
 	app.HelpName = Name
 	app.Version = Version
-	app.Usage = fmt.Sprintf(`A simple cli interface for managing beanstalkd queues.
+	app.Authors = []cli.Author{
+		{
+			Name:  "Edwin Hoksberg",
+			Email: "mail@edwinhoksberg.nl",
+		},
+	}
+	app.UsageText = fmt.Sprintf(`A simple cli interface for managing beanstalkd queues.
 
-   Homepage: https://github.com/edwinhoksberg/beanstalkd-cli
-   Commit:   %s`, CommitHash)
+   Homepage: https://github.com/edwinhoksberg/beanstalkd-cli`)
 
 	app.Commands = []cli.Command{
 		{
