@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	Name       string
-	Version    string
+	Name    string
+	Version string
 )
 
 func main() {
@@ -20,6 +20,7 @@ func main() {
 	app := cli.NewApp()
 
 	app.Name = Name
+	app.Usage = ""
 	app.HelpName = Name
 	app.Version = Version
 	app.Authors = []cli.Author{

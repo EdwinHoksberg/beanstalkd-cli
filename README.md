@@ -7,16 +7,18 @@ You can find the latest release including binaries [here](https://github.com/Edw
 ## Usage
 ```
 NAME:
-   beanstalkd-cli - A simple cli interface for managing beanstalkd queues.
-
-   Homepage: https://github.com/edwinhoksberg/beanstalkd-cli
-   Commit:   a7b7f2db5f5b9dd3a1978c107dbd96547394429c
+   beanstalkd-cli
 
 USAGE:
-   beanstalkd-cli [global options] command [command options] [arguments...]
+   A simple cli interface for managing beanstalkd queues.
+   
+   Homepage: https://github.com/edwinhoksberg/beanstalkd-cli
 
 VERSION:
-   1.2.7
+   1.2.7 [5e2ef1289d916807f5a4f787dc9634b9753fa4cb]
+
+AUTHOR:
+   Edwin Hoksberg <mail@edwinhoksberg.nl>
 
 COMMANDS:
      monitor  Monitor the beanstalkd queues
@@ -28,6 +30,7 @@ COMMANDS:
 
 GLOBAL OPTIONS:
    --verbose       set this to enable debug logging
+   --quiet         set this to disable logging
    --server value  The server name where beanstalkd is running (default: "127.0.0.1")
    --port value    The port on which beanstalkd is listening (default: 11300)
    --help, -h      show help
