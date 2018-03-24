@@ -16,6 +16,7 @@ func (c *Command) Peek(cli *cli.Context) {
 	}
 
 	// Select a tube to peek from
+	log.Debug("Selecting correct tube...")
 	client.Use(cli.String("tube"))
 	if err != nil {
 		log.WithError(err).WithField("tube", cli.String("tube")).Error("Failed to select tube")

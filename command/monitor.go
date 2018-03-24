@@ -81,6 +81,8 @@ func (c *Command) Monitor(cli *cli.Context) {
 
 		// Write stats for each tube.
 		for _, tube := range tubes {
+			log.WithField("tube", tube).Debug("Retrieving tube stats...")
+
 			stats, err := client.StatsTube(tube)
 			if err != nil {
 				log.WithError(err).WithField("tube", tube).Error("Error reading tube stats")

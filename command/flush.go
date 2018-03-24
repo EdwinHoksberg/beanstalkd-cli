@@ -15,23 +15,29 @@ func (c *Command) Flush(cli *cli.Context) {
 		return
 	}
 
+	log.Debug("Selecting correct tube...")
+
+	if cli.String("tube") != "default" {
+		// Watch a specified tube.
+		if _, err := client.Watch(cli.String("tube")); err != nil {
+			log.WithError(err).WithField("tube", cli.String("tube")).Error("Failed to select tube")
+			return
+		}
+
+		// By default the default tube is always in the watch list.
+		// To prevent flushing any jobs from the default tube we can ignore it
+		// after watching a different tube.
+		if _, err := client.Ignore("default"); err != nil {
+			log.WithError(err).Error("Failed to ignore default tube")
+			return
+		}
+	}
+
+	log.Debug("Starting flush loop...")
+
 	counter := 0
 	for {
-		if cli.String("tube") != "default" {
-			// Watch a specified tube.
-			if _, err := client.Watch(cli.String("tube")); err != nil {
-				log.WithError(err).WithField("tube", cli.String("tube")).Error("Failed to select tube")
-				return
-			}
-
-			// By default the default tube is always in the watch list.
-			// To prevent flushing any jobs from the default tube we can ignore it
-			// after watching a different tube.
-			if _, err := client.Ignore("default"); err != nil {
-				log.WithError(err).Error("Failed to ignore default tube")
-				return
-			}
-		}
+		log.Debug("[Loop] Reserving job...")
 
 		job, err := client.Reserve(1)
 		if err != nil {
@@ -53,6 +59,8 @@ func (c *Command) Flush(cli *cli.Context) {
 			}
 		}
 
+		log.Debug("[Loop] Deleting job...")
+
 		// Delete the job from the tube
 		if err := client.Delete(job.Id); err != nil {
 			log.WithError(err).WithFields(logrus.Fields{
@@ -61,6 +69,8 @@ func (c *Command) Flush(cli *cli.Context) {
 			}).Error("Failed to delete job")
 			break
 		}
+
+		log.Debug("[Loop] Done")
 
 		counter++
 	}

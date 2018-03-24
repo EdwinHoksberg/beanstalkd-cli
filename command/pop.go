@@ -16,6 +16,8 @@ func (c *Command) Pop(cli *cli.Context) {
 		return
 	}
 
+	log.Debug("Selecting correct tube...")
+
 	if cli.String("tube") != "default" {
 		// Watch a specified tube.
 		if _, err := client.Watch(cli.String("tube")); err != nil {

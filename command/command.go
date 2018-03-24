@@ -44,5 +44,7 @@ func (c Command) GetBeanstalkdClient(cli *cli.Context) (*beanstalkd.BeanstalkdCl
 		return nil, err
 	}
 
+	log.Debug("Succesfully connected")
+
 	return client, nil
 }

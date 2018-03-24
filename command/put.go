@@ -21,12 +21,16 @@ func (c *Command) Put(cli *cli.Context) {
 		return
 	}
 
+	log.Debug("Selecting correct tube...")
+
 	// Select a tube to insert
 	client.Use(cli.String("tube"))
 	if err != nil {
 		log.WithError(err).WithField("tube", cli.String("tube")).Error("Failed to select tube")
 		return
 	}
+
+	log.Debug("Inserting job...")
 
 	// Insert the new job
 	id, err := client.Put(
