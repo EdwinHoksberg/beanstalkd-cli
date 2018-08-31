@@ -2,9 +2,11 @@ package command
 
 import (
 	"fmt"
+
 	"github.com/urfave/cli"
 )
 
+// Peek displays the next job in the tube without removing it.
 func (c *Command) Peek(cli *cli.Context) {
 	log := c.GetLogger(cli)
 

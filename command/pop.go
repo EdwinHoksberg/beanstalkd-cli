@@ -2,10 +2,12 @@ package command
 
 import (
 	"fmt"
+
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )
 
+// Pop removes and displays a job from the selected tube.
 func (c *Command) Pop(cli *cli.Context) {
 	log := c.GetLogger(cli)
 

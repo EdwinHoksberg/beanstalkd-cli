@@ -3,8 +3,9 @@ package command
 import (
 	"bytes"
 	"fmt"
-	"github.com/urfave/cli"
 	"time"
+
+	"github.com/urfave/cli"
 )
 
 var (
@@ -24,6 +25,7 @@ var (
 	}
 )
 
+// Monitor outputs a overview of server and tube statistics, repeated every second.
 func (c *Command) Monitor(cli *cli.Context) {
 	log := c.GetLogger(cli)
 

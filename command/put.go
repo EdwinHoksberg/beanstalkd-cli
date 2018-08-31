@@ -8,6 +8,7 @@ import (
 	"github.com/urfave/cli"
 )
 
+// Put adds a new job into a queue, from a string or reading from stdin.
 func (c *Command) Put(cli *cli.Context) {
 	log := c.GetLogger(cli)
 

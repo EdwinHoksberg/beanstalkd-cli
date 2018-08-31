@@ -5,6 +5,7 @@ import (
 	"github.com/urfave/cli"
 )
 
+// Flush empties an entire tube of jobs.
 func (c *Command) Flush(cli *cli.Context) {
 	log := c.GetLogger(cli)
 

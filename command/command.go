@@ -9,8 +9,11 @@ import (
 	"github.com/urfave/cli"
 )
 
+// Command holds data for the cli commands.
 type Command struct{}
 
+// GetLogger returns a logrus object according to any flags set
+// in the application parameters.
 func (c Command) GetLogger(cli *cli.Context) *log.Logger {
 	if cli.GlobalBool("quiet") {
 		logger, _ := test.NewNullLogger()
@@ -33,6 +36,7 @@ func (c Command) GetLogger(cli *cli.Context) *log.Logger {
 	return log.StandardLogger()
 }
 
+// GetBeanstalkdClient returns a client object for interacting with a beanstalkd server.
 func (c Command) GetBeanstalkdClient(cli *cli.Context) (*beanstalkd.BeanstalkdClient, error) {
 	// Build a connection string.
 	addr := fmt.Sprintf("%s:%d", cli.GlobalString("server"), cli.GlobalInt("port"))
