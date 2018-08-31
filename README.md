@@ -41,7 +41,7 @@ GLOBAL OPTIONS:
 This program is written in [Go](https://golang.org/), using these dependencies:
 - [sirupsen/logrus](https://github.com/sirupsen/logrus) - Logrus is a structured logger for Go (golang), completely API compatible with the standard library logger.
 - [urfave/cli](https://github.com/urfave/cli) - cli is a simple, fast, and fun package for building command line apps in Go.
-- [maxid/beanstalkd](https://github.com/maxid/beanstalkd) - A golang beanstalkd client.
+- [mpdroog/beanstalkd](https://github.com/mpdroog/beanstalkd) - A golang beanstalkd client.
 
 ## License
 [MIT](LICENSE.md)
