@@ -85,7 +85,8 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:  "data",
-					Usage: "The message to write to the queue",
+					Usage: "The message to write to the queue (default reads from stdin)",
+					Value: "-",
 				},
 				cli.IntFlag{
 					Name:  "priority",

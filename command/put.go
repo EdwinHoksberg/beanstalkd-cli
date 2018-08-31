@@ -1,6 +1,9 @@
 package command
 
 import (
+	"io/ioutil"
+	"os"
+
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )
@@ -12,6 +15,20 @@ func (c *Command) Put(cli *cli.Context) {
 	if len(cli.String("data")) < 1 {
 		log.Error("No data passed, use the --data parameter to insert data into a tube.")
 		return
+	}
+
+	data := []byte(cli.String("data"))
+
+	// Read data from stdin
+	var err error
+	if cli.String("data") == "-" {
+		// Read data from stdin until EOF
+		data, err = ioutil.ReadAll(os.Stdin)
+
+		// Exit with an error if we couldnt read from stdin.
+		if err != nil {
+			log.WithError(err).Error("Could not read from stdin")
+		}
 	}
 
 	// Build and connect to beanstalkd
@@ -37,7 +54,7 @@ func (c *Command) Put(cli *cli.Context) {
 		uint32(cli.Int("priority")),
 		cli.Duration("delay"),
 		cli.Duration("duration"),
-		[]byte(cli.String("data")),
+		data,
 	)
 
 	if err != nil {
