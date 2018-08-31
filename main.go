@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"time"
+
 	"github.com/edwinhoksberg/beanstalkd-cli/command"
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
-	"os"
-	"time"
 )
 
 var (
