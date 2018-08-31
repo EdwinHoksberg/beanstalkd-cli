@@ -81,7 +81,7 @@ func main() {
 			Flags: []cli.Flag{
 				cli.StringFlag{
 					Name:  "tube",
-					Usage: "The name of the tube to pop an item from",
+					Usage: "The name of the tube where a new job should be inserted",
 					Value: "default",
 				},
 				cli.StringFlag{
