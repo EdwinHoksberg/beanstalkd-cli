@@ -2,7 +2,8 @@ package command
 
 import (
 	"fmt"
-	"github.com/maxid/beanstalkd"
+
+	"github.com/mpdroog/beanstalkd"
 	log "github.com/sirupsen/logrus"
 	"github.com/sirupsen/logrus/hooks/test"
 	"github.com/urfave/cli"
