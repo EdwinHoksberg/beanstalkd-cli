@@ -6,14 +6,14 @@ import (
 )
 
 // Flush empties an entire tube of jobs.
-func (c *Command) Flush(cli *cli.Context) {
+func (c *Command) Flush(cli *cli.Context) error {
 	log := c.GetLogger(cli)
 
 	// Build and connect to beanstalkd
 	client, err := c.GetBeanstalkdClient(cli)
 	if err != nil {
 		log.WithError(err).Error("Could not connect to beanstalkd server")
-		return
+		return err
 	}
 
 	log.Debug("Selecting correct tube...")
@@ -22,7 +22,7 @@ func (c *Command) Flush(cli *cli.Context) {
 		// Watch a specified tube.
 		if _, err := client.Watch(cli.String("tube")); err != nil {
 			log.WithError(err).WithField("tube", cli.String("tube")).Error("Failed to select tube")
-			return
+			return err
 		}
 
 		// By default the default tube is always in the watch list.
@@ -30,7 +30,7 @@ func (c *Command) Flush(cli *cli.Context) {
 		// after watching a different tube.
 		if _, err := client.Ignore("default"); err != nil {
 			log.WithError(err).Error("Failed to ignore default tube")
-			return
+			return err
 		}
 	}
 
@@ -79,4 +79,6 @@ func (c *Command) Flush(cli *cli.Context) {
 	log.Infof("%d jobs removed", counter)
 
 	client.Quit()
+
+	return nil
 }

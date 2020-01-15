@@ -9,13 +9,13 @@ import (
 )
 
 // Put adds a new job into a queue, from a string or reading from stdin.
-func (c *Command) Put(cli *cli.Context) {
+func (c *Command) Put(cli *cli.Context) error {
 	log := c.GetLogger(cli)
 
 	// Check if the job data is not empty
 	if len(cli.String("data")) < 1 {
 		log.Error("No data passed, use the --data parameter to insert data into a tube.")
-		return
+		return nil
 	}
 
 	data := []byte(cli.String("data"))
@@ -36,7 +36,7 @@ func (c *Command) Put(cli *cli.Context) {
 	client, err := c.GetBeanstalkdClient(cli)
 	if err != nil {
 		log.WithError(err).Error("Could not connect to beanstalkd server")
-		return
+		return err
 	}
 
 	log.Debug("Selecting correct tube...")
@@ -45,7 +45,7 @@ func (c *Command) Put(cli *cli.Context) {
 	client.Use(cli.String("tube"))
 	if err != nil {
 		log.WithError(err).WithField("tube", cli.String("tube")).Error("Failed to select tube")
-		return
+		return err
 	}
 
 	log.Debug("Inserting job...")
@@ -60,7 +60,7 @@ func (c *Command) Put(cli *cli.Context) {
 
 	if err != nil {
 		log.WithError(err).WithField("tube", cli.String("tube")).Error("Failed to insert job in queue")
-		return
+		return err
 	}
 
 	log.WithFields(logrus.Fields{
@@ -69,4 +69,6 @@ func (c *Command) Put(cli *cli.Context) {
 	}).Info("Succesfully inserted job")
 
 	client.Quit()
+
+	return nil
 }

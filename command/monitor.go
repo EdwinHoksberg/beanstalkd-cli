@@ -26,14 +26,14 @@ var (
 )
 
 // Monitor outputs a overview of server and tube statistics, repeated every second.
-func (c *Command) Monitor(cli *cli.Context) {
+func (c *Command) Monitor(cli *cli.Context) error {
 	log := c.GetLogger(cli)
 
 	// Build and connect to beanstalkd
 	client, err := c.GetBeanstalkdClient(cli)
 	if err != nil {
 		log.WithError(err).Error("Could not connect to beanstalkd server")
-		return
+		return err
 	}
 
 	// Assign a few interesting keys to display.
@@ -104,4 +104,6 @@ func (c *Command) Monitor(cli *cli.Context) {
 		// Sleep for 1 second.
 		time.Sleep(time.Second)
 	}
+
+	return nil
 }
