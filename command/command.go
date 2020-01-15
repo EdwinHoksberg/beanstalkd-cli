@@ -15,7 +15,7 @@ type Command struct{}
 // GetLogger returns a logrus object according to any flags set
 // in the application parameters.
 func (c Command) GetLogger(cli *cli.Context) *log.Logger {
-	if cli.GlobalBool("quiet") {
+	if cli.Bool("quiet") {
 		logger, _ := test.NewNullLogger()
 		return logger
 	}
@@ -29,7 +29,7 @@ func (c Command) GetLogger(cli *cli.Context) *log.Logger {
 	log.SetFormatter(format)
 
 	// If the verbose flag was enabled, enable debug logging
-	if cli.GlobalBool("verbose") {
+	if cli.Bool("verbose") {
 		log.SetLevel(log.DebugLevel)
 	}
 
@@ -39,7 +39,7 @@ func (c Command) GetLogger(cli *cli.Context) *log.Logger {
 // GetBeanstalkdClient returns a client object for interacting with a beanstalkd server.
 func (c Command) GetBeanstalkdClient(cli *cli.Context) (*beanstalkd.BeanstalkdClient, error) {
 	// Build a connection string.
-	addr := fmt.Sprintf("%s:%d", cli.GlobalString("server"), cli.GlobalInt("port"))
+	addr := fmt.Sprintf("%s:%d", cli.String("server"), cli.Int("port"))
 
 	// Connect to the beanstalkd server.
 	log.Debugf("Connecting to beanstalkd server: %s", addr)
