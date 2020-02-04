@@ -3,6 +3,7 @@ language: go
 env:
   global:
     - PROGRAM=beanstalkd-cli
+    - GO111MODULE=on
   matrix:
     - GIMME_OS=linux GIMME_ARCH=amd64 EXT=
     - GIMME_OS=linux GIMME_ARCH=386 EXT=
