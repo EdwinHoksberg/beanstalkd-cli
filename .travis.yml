@@ -1,10 +1,13 @@
+os:
+  - linux
+
 language: go
 
 env:
   global:
     - PROGRAM=beanstalkd-cli
     - GO111MODULE=on
-  matrix:
+  jobs:
     - GIMME_OS=linux GIMME_ARCH=amd64 EXT=
     - GIMME_OS=linux GIMME_ARCH=386 EXT=
     - GIMME_OS=windows GIMME_ARCH=amd64 EXT=.exe
@@ -19,9 +22,8 @@ script:
 
 deploy:
   provider: releases
-  api_key:
+  token:
     secure: XK7hoV3VH4ya/I+dw4JPNYf9u1AZkP02T7ZkfMAHDK5pYWyS9S8MeRj/kCrgjPi5tLMgsPcxrN19FXa+FVkkqc1ngGd4ALrJMDx4/RVMyH6JKhr/pmTt6gxTumrCclQrPiubhVaM5ihfY9NRxymZnipKHWtZTuLNzy88m4Xn2yRKYk1FSXr/ssE6qY7aW3StjqoDNZi6TeUd7Dooz2WTwCdquH23EsUiclJ1WMKSHJz7ROeiBU7B2Vvp1uFIAijr5L4Vw96XVfEDkL1G0zB6IX1/IJ0dQk4SiL+Qv26GcI3zsVfH9UZCa9NfcFEMwvjb5a2bcPRlxIww+ScN01OLD6IY8TcKjGWkhmCx9bozN+m402C273ELypBptgjw2F0tOgMqdT4Shr+s8RqnSLru5kZ/kyJXMN+rgN/c3pA1YpZmbjnEt90muSwevkNEUG47mwaTwqHoEvb+tS3LuLKt7iFitlu7P9i15UlOTgFDSxSoimGHoKJwkLukSKqyFnlIXTprzj2quENxekM1OhmpGC2YW+81JZWfzbITWtY5D8j6JXBv//1rF5QgTscovd8xUTGN7FzezLBsSAio+DzJ1ZiDqfM2czSRTf/3ZO2sENVdOnXztleyDx91eZWVSb/BFUXCW1fJ74xChdQjZk4Uau21OC3L9wiWdhQu55YfyRw=
   file: ./bin/beanstalkd-cli_${GIMME_OS}_${GIMME_ARCH}${EXT}
-  skip_cleanup: true
   on:
     tags: true
