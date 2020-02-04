@@ -23,7 +23,7 @@ func main() {
 	app.Usage = ""
 	app.HelpName = Name
 	app.Version = Version
-	app.Authors = []*cli.Author{
+	app.Authors = []cli.Author{
 		{
 			Name:  "Edwin Hoksberg",
 			Email: "mail@edwinhoksberg.nl",
@@ -33,7 +33,7 @@ func main() {
 
    Homepage: https://github.com/edwinhoksberg/beanstalkd-cli`)
 
-	app.Commands = []*cli.Command{
+	app.Commands = []cli.Command{
 		{
 			Name:   "monitor",
 			Usage:  "Monitor the beanstalkd queues",
