@@ -21,6 +21,7 @@ before_install:
   - docker run -d -p 11300:11300 schickling/beanstalkd
 
 install:
+  - sudo apt-get -y install shelltestrunner
   - go get -v
 
 script:
