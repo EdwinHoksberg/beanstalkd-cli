@@ -39,7 +39,7 @@ func (c Command) GetLogger(cli *cli.Context) *log.Logger {
 // GetBeanstalkdClient returns a client object for interacting with a beanstalkd server.
 func (c Command) GetBeanstalkdClient(cli *cli.Context) (*beanstalkd.BeanstalkdClient, error) {
 	// Build a connection string.
-	addr := fmt.Sprintf("%s:%d", cli.String("server"), cli.Int("port"))
+	addr := fmt.Sprintf("%s:%d", cli.GlobalString("server"), cli.GlobalInt("port"))
 
 	// Connect to the beanstalkd server.
 	log.Debugf("Connecting to beanstalkd server: %s", addr)
