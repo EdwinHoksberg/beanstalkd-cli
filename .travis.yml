@@ -26,7 +26,7 @@ install:
 
 script:
   - go build -v -ldflags "-X main.CommitHash=${TRAVIS_COMMIT} -X main.Name=${PROGRAM} -X main.Version=${TRAVIS_TAG}" -o ./bin/beanstalkd-cli_${GIMME_OS}_${GIMME_ARCH}${EXT}
-  - [ "$GIMME_OS" = "linux" ] && shelltest --with ./bin/beanstalkd-cli_${GIMME_OS}_${GIMME_ARCH}${EXT} --diff --color --all tests || true
+  - bash run-tests.sh
 
 deploy:
   provider: releases
