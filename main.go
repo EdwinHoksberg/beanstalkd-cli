@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/edwinhoksberg/beanstalkd-cli/command"
+	"beanstalkd-cli/command"
 	"github.com/urfave/cli"
 )
 
