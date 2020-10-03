@@ -19,6 +19,11 @@ install:
 	cp $(BUILDPATH)/bin/$(PROGRAM) /usr/bin/$(PROGRAM)
 	gzip -c $(PROGRAM).man | tee $(MANPATH)/$(PROGRAM).1.gz > /dev/null
 
+ci-test:
+ifeq ($(GIMME_OS),linux)
+	shelltest --with ./bin/beanstalkd-cli_$(GIMME_OS)_$(GIMME_ARCH)$(EXT) --diff --color --all tests
+endif
+
 clean:
 	rm -f $(BUILDPATH)/bin/$(PROGRAM)
 

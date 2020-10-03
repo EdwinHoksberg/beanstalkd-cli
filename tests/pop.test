@@ -1,0 +1,21 @@
+beanstalkd-cli put --data="pop test"
+>>> /Succesfully inserted job/
+>>>= 0
+
+beanstalkd-cli pop
+>>>
+pop test
+>>>= 0
+
+
+beanstalkd-cli put --data="pop test2" --tube=pop-test
+>>> /Succesfully inserted job/
+>>>= 0
+
+beanstalkd-cli pop --tube=pop-test
+>>>
+pop test2
+>>>= 0
+
+beanstalkd-cli flush
+>>>= 0

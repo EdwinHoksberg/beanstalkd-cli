@@ -1,0 +1,16 @@
+beanstalkd-cli put --data="peek-test"
+>>> /Succesfully inserted job/
+>>>= 0
+
+beanstalkd-cli peek
+>>>
+peek-test
+>>>= 0
+
+beanstalkd-cli peek
+>>>
+peek-test
+>>>= 0
+
+beanstalkd-cli flush
+>>>= 0

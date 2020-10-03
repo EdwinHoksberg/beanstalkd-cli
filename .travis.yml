@@ -3,6 +3,9 @@ os:
 
 language: go
 
+services:
+  - docker
+
 env:
   global:
     - PROGRAM=beanstalkd-cli
@@ -14,11 +17,16 @@ env:
     - GIMME_OS=windows GIMME_ARCH=386 EXT=.exe
     - GIMME_OS=darwin GIMME_ARCH=amd64 EXT=
 
+before_install:
+  - docker run -d -p 11300:11300 schickling/beanstalkd
+
 install:
+  - sudo apt-get -y install shelltestrunner
   - go get -v
 
 script:
   - go build -v -ldflags "-X main.CommitHash=${TRAVIS_COMMIT} -X main.Name=${PROGRAM} -X main.Version=${TRAVIS_TAG}" -o ./bin/beanstalkd-cli_${GIMME_OS}_${GIMME_ARCH}${EXT}
+  - make ci-test
 
 deploy:
   provider: releases

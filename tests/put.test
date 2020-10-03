@@ -1,0 +1,16 @@
+beanstalkd-cli put --data="test"
+>>> /Succesfully inserted job/
+>>>= 0
+
+beanstalkd-cli put
+<<<
+test2
+>>> /Succesfully inserted job/
+>>>= 0
+
+beanstalkd-cli put --data="put tube" --tube=put-test
+>>> /tube=put-test/
+>>>= 0
+
+beanstalkd-cli flush
+>>>= 0
