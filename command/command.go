@@ -2,6 +2,7 @@ package command
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/mpdroog/beanstalkd"
 	log "github.com/sirupsen/logrus"
@@ -33,7 +34,10 @@ func (c Command) GetLogger(cli *cli.Context) *log.Logger {
 		log.SetLevel(log.DebugLevel)
 	}
 
-	return log.StandardLogger()
+	logger := log.StandardLogger()
+	logger.SetOutput(os.Stdout)
+
+	return logger
 }
 
 // GetBeanstalkdClient returns a client object for interacting with a beanstalkd server.
