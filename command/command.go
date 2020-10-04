@@ -16,7 +16,7 @@ type Command struct{}
 // GetLogger returns a logrus object according to any flags set
 // in the application parameters.
 func (c Command) GetLogger(cli *cli.Context) *log.Logger {
-	if cli.Bool("quiet") {
+	if cli.GlobalBool("quiet") {
 		logger, _ := test.NewNullLogger()
 		return logger
 	}
@@ -30,7 +30,7 @@ func (c Command) GetLogger(cli *cli.Context) *log.Logger {
 	log.SetFormatter(format)
 
 	// If the verbose flag was enabled, enable debug logging
-	if cli.Bool("verbose") {
+	if cli.GlobalBool("verbose") {
 		log.SetLevel(log.DebugLevel)
 	}
 
