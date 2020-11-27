@@ -54,7 +54,7 @@ func (c *Command) Put(cli *cli.Context) error {
 	id, err := client.Put(
 		uint32(cli.Int("priority")),
 		cli.Duration("delay"),
-		cli.Duration("duration"),
+		cli.Duration("ttr"),
 		data,
 	)
 
