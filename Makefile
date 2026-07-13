@@ -20,8 +20,8 @@ install:
 	gzip -c $(PROGRAM).man | tee $(MANPATH)/$(PROGRAM).1.gz > /dev/null
 
 ci-test:
-ifeq ($(GIMME_OS),linux)
-	shelltest --with ./bin/beanstalkd-cli_$(GIMME_OS)_$(GIMME_ARCH)$(EXT) --diff --color --all tests
+ifeq ($(GOOS),linux)
+	shelltest --with ./bin/beanstalkd-cli_$(GOOS)_$(GOARCH)$(EXT) --diff --color --all tests
 endif
 
 clean:

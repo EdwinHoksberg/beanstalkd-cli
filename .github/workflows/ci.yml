@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  PROGRAM: beanstalkd-cli
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+            ext: ""
+          - goos: linux
+            goarch: "386"
+            ext: ""
+          - goos: windows
+            goarch: amd64
+            ext: ".exe"
+          - goos: windows
+            goarch: "386"
+            ext: ".exe"
+          - goos: darwin
+            goarch: amd64
+            ext: ""
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Start beanstalkd
+        if: matrix.goos == 'linux'
+        run: docker run -d -p 11300:11300 schickling/beanstalkd
+
+      - name: Install shelltestrunner
+        if: matrix.goos == 'linux'
+        run: sudo apt-get update && sudo apt-get -y install shelltestrunner
+
+      - name: Build
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+        run: |
+          VERSION="${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || '' }}"
+          go build -v -ldflags "-X main.Name=${PROGRAM} -X main.Version=${VERSION}" \
+            -o ./bin/${PROGRAM}_${{ matrix.goos }}_${{ matrix.goarch }}${{ matrix.ext }}
+
+      - name: Test
+        if: matrix.goos == 'linux'
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          EXT: ${{ matrix.ext }}
+        run: make ci-test
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: binary-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: bin/${{ env.PROGRAM }}_${{ matrix.goos }}_${{ matrix.goarch }}${{ matrix.ext }}
+          if-no-files-found: error
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: bin
+          pattern: binary-*
+          merge-multiple: true
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: bin/*
